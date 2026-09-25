@@ -3,86 +3,721 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Daily Health Notes</title>
+  <title>Daily Health Notes — Personal Health Journal &amp; Symptom Tracker</title>
+  <meta name="description" content="Daily Health Notes is a simple personal health journal for iPhone and iPad to record symptoms, health measurements, medications, medical tests, notes, cycle information, and family profiles in one place.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://ginawu-dev.github.io/daily_health_notes/">
+  <meta property="og:title" content="Daily Health Notes — Personal Health Journal &amp; Symptom Tracker">
+  <meta property="og:description" content="Daily Health Notes is a simple personal health journal for iPhone and iPad to record symptoms, health measurements, medications, medical tests, notes, cycle information, and family profiles in one place.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ginawu-dev.github.io/daily_health_notes/">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Daily Health Notes",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "iOS",
+      "description": "Daily Health Notes is a personal health journal for iPhone and iPad for recording symptoms, health measurements, medications, medical tests, notes, and cycle information in one place.",
+      "applicationUrl": "https://apps.apple.com/ng/app/daily-health-notes/id6796943929",
+      "url": "https://ginawu-dev.github.io/daily_health_notes/"
+    }
+  </script>
   <style>
+    :root {
+      --bg: #f5f8fb;
+      --panel: #ffffff;
+      --panel-soft: #eef7fb;
+      --primary: #0d6e8b;
+      --primary-dark: #0b586f;
+      --accent: #d9f1f5;
+      --text: #1b2a34;
+      --muted: #5f727b;
+      --line: #dfe9ee;
+      --shadow: 0 18px 40px rgba(16, 60, 72, 0.08);
+      --radius: 22px;
+      --max: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f7fbfd 0%, var(--bg) 100%);
       line-height: 1.6;
-      color: #1d1d1f;
-      background: #f5f5f7;
+    }
+
+    img { max-width: 100%; display: block; }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(247, 251, 253, 0.9);
+      border-bottom: 1px solid rgba(223, 233, 238, 0.9);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary) 0%, #7fc5d2 100%);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      font-size: 0.96rem;
+      color: var(--muted);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.9rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .button:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(13, 110, 139, 0.2);
+    }
+
+    .button-secondary {
+      background: #fff;
+      color: var(--primary-dark);
+      border-color: var(--line);
     }
 
     main {
-      max-width: 760px;
-      margin: 48px auto;
-      padding: 32px;
-      background: white;
-      border-radius: 20px;
+      padding-bottom: 56px;
+    }
+
+    .hero {
+      padding: 64px 0 28px;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     h1 {
-      color: #159fbd;
+      margin: 18px 0 14px;
+      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      line-height: 1.05;
+      letter-spacing: -0.06em;
+      color: var(--text);
+    }
+
+    .tagline {
+      margin: 0 0 18px;
+      font-size: clamp(1.15rem, 2vw, 1.6rem);
+      color: var(--primary-dark);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .lead {
+      max-width: 62ch;
+      margin: 0 0 22px;
+      font-size: 1.08rem;
+      color: var(--muted);
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .hero-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    .mini-card {
+      background: linear-gradient(135deg, #edf8fb 0%, #fff 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 18px 14px;
+      margin-top: 18px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      color: var(--primary-dark);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .mini-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .mini-card li::before {
+      content: "•";
+      color: var(--primary);
+      margin-right: 8px;
+    }
+
+    section {
+      padding-top: 28px;
+    }
+
+    .section-header {
+      margin: 0 0 18px;
     }
 
     h2 {
-      margin-top: 32px;
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
     }
 
-    a {
-      color: #087ea4;
+    .section-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 56ch;
+    }
+
+    .feature-grid,
+    .bullet-grid,
+    .profile-grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 22px;
+    }
+
+    .bullet-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 22px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 18px rgba(20, 45, 55, 0.03);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+    }
+
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .card ul li + li {
+      margin-top: 8px;
+    }
+
+    .callout {
+      margin-top: 28px;
+      padding: 24px;
+      border-radius: 22px;
+      background: #fff7e8;
+      border: 1px solid #f3dcc1;
+      color: #5c4120;
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .faq {
+      margin-top: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 0 18px;
+      box-shadow: 0 8px 18px rgba(20, 45, 55, 0.02);
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 18px 0;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    details p {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .support-box,
+    .privacy-box {
+      margin-top: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 26px;
+    }
+
+    .support-box p,
+    .privacy-box p {
+      color: var(--muted);
+      margin: 0;
     }
 
     footer {
-      margin-top: 40px;
-      color: #666;
-      font-size: 0.9rem;
+      padding: 32px 0 48px;
+      color: var(--muted);
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner,
+      .feature-grid,
+      .bullet-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .cta-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 42px;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Daily Health Notes</h1>
+  <header>
+    <div class="container topbar">
+      <a href="#top" class="brand" aria-label="Daily Health Notes home">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>Daily Health Notes</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#journal">Journal</a>
+        <a href="#medications">Medications</a>
+        <a href="#trends">Trends</a>
+        <a href="#cycle">Cycle</a>
+        <a href="#family">Family</a>
+        <a href="#faq">FAQ</a>
+        <a href="privacy.html">Privacy</a>
+        <a class="button button-primary" href="https://apps.apple.com/ng/app/daily-health-notes/id6796943929" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+      </nav>
+    </div>
+  </header>
 
-    <p>
-      Daily Health Notes helps you record symptoms, body temperature,
-      blood pressure, medical tests, medications, and health trends.
-    </p>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <span class="eyebrow">Personal health journal</span>
+          <h1>Daily Health Notes</h1>
+          <p class="tagline">Your Simple Personal Health Journal</p>
+          <p class="lead">
+            Record symptoms, health measurements, medications, medical tests, cycle information,
+            and everyday health notes in one place with an organized, easy-to-use journal for iPhone and iPad.
+          </p>
+          <div class="cta-row">
+            <a class="button button-primary" href="https://apps.apple.com/ng/app/daily-health-notes/id6796943929" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+            <a class="button button-secondary" href="#faq">Learn more</a>
+          </div>
+          <div class="mini-card">
+            <strong>Keep a simple record of</strong>
+            <ul>
+              <li>Symptoms and significance levels</li>
+              <li>Temperature and blood pressure</li>
+              <li>Medications and reminders</li>
+              <li>Medical tests and notes</li>
+              <li>Cycle and family health details</li>
+            </ul>
+          </div>
+        </div>
 
-    <h2>Features</h2>
-    <ul>
-      <li>Record daily health information</li>
-      <li>Track symptoms and significance levels</li>
-      <li>Record body temperature and blood pressure</li>
-      <li>Schedule medication and medical-test reminders</li>
-      <li>Manage health records for family members</li>
-      <li>Review weekly and monthly trends</li>
-      <li>Export your health records for backup</li>
-    </ul>
+        <div class="hero-card" aria-label="Daily Health Notes feature highlights">
+          <div class="card">
+            <h3>Daily health tracking</h3>
+            <p>Designed for personal health tracking, helping you keep a simple journal of everyday wellness information.</p>
+            <ul>
+              <li>Symptoms and significance levels</li>
+              <li>Body temperature and blood pressure records</li>
+              <li>Medical test records and notes</li>
+              <li>Medication schedules and reminders</li>
+              <li>Cycle tracking and family profiles</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <h2>Need help?</h2>
-    <p>
-      For support, feedback, or questions, email:
-      <a href="mailto:ginawuwriter@outlook.com">ginawuwriter@outlook.com</a>
-    </p>
+    <section id="journal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Daily Health Journal</h2>
+          <p>Keep a personal record of the everyday details you may want to remember across your health notes and routines.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="card">
+            <h3>Symptoms</h3>
+            <p>Log symptoms and note the significance level you choose for each entry.</p>
+          </article>
+          <article class="card">
+            <h3>Measurements</h3>
+            <p>Record body temperature and blood pressure in a clear, organized journal.</p>
+          </article>
+          <article class="card">
+            <h3>Health notes</h3>
+            <p>Capture personal health notes, medical-test records, and daily health information in one place.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <h2>Privacy</h2>
-    <p>
-      Your health records are stored locally on your device unless you
-      choose to export or share them. Please keep backups in a secure location.
-    </p>
+    <section id="medications">
+      <div class="container">
+        <div class="section-header">
+          <h2>Medications &amp; Reminders</h2>
+          <p>Stay organized with medication records, reminder options, and appointment tracking for medical tests.</p>
+        </div>
+        <div class="bullet-grid">
+          <article class="card">
+            <h3>Record medication details</h3>
+            <ul>
+              <li>Medication records</li>
+              <li>Daily or weekly medication schedules</li>
+              <li>Medication reminders</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Appointments and reminders</h3>
+            <ul>
+              <li>Medical-test appointment reminders</li>
+              <li>Medication reminders for daily or recurring routines</li>
+              <li>Medicines can also be recorded without reminders</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <h2>Important notice</h2>
-    <p>
-      Daily Health Notes is intended for personal health tracking only.
-      It is not a medical device and does not provide medical diagnosis,
-      treatment, or emergency advice. Contact a qualified healthcare
-      professional for medical concerns.
-    </p>
+    <section id="trends">
+      <div class="container">
+        <div class="section-header">
+          <h2>Health History &amp; Trends</h2>
+          <p>Review your recorded information over time with weekly and monthly views that help you keep track of your health journal history.</p>
+        </div>
+        <div class="card">
+          <p>Daily Health Notes keeps separate entries, medications, history, and trends for each profile and helps you review your recorded information over time. This app is intended for personal health tracking only and does not provide medical diagnosis, treatment, or emergency advice.</p>
+        </div>
+      </div>
+    </section>
 
-    <footer>
-      © 2026
-    </footer>
+    <section id="cycle">
+      <div class="container">
+        <div class="section-header">
+          <h2>Menstrual Cycle Tracking</h2>
+          <p>Track menstrual cycle details alongside your other health notes.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="card">
+            <h3>Cycle details</h3>
+            <ul>
+              <li>Period start and end dates</li>
+              <li>Daily flow levels</li>
+              <li>Intimate-day tracking</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Calendar view</h3>
+            <ul>
+              <li>Period ranges displayed on the calendar</li>
+              <li>Upcoming-period predictions</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Health journal context</h3>
+            <p>Keep your menstrual cycle records alongside symptoms, medications, and everyday health notes.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="family">
+      <div class="container">
+        <div class="section-header">
+          <h2>Family Profiles</h2>
+          <p>Separate profiles can keep records organized for different people, with separate entries, medications, history, trends, and applicable cycle data.</p>
+        </div>
+        <div class="profile-grid">
+          <div class="card">
+            <ul>
+              <li>Separate profiles for family members</li>
+              <li>Independent entries, medications, and history</li>
+              <li>Trends and cycle data kept with each profile</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sync">
+      <div class="container">
+        <div class="section-header">
+          <h2>iCloud &amp; Backup</h2>
+          <p>Keep your records available across devices when iCloud is available, and make a backup export when you need it.</p>
+        </div>
+        <div class="bullet-grid">
+          <article class="card">
+            <h3>Sync</h3>
+            <p>Records can sync through the user’s private iCloud database when available. The app also includes a Sync Now option for retrieving records when setting up a new device.</p>
+          </article>
+          <article class="card">
+            <h3>Backup</h3>
+            <p>Users can export a backup of their records. This does not guarantee absolute security or privacy for any storage or sharing method.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="who-it-is-for">
+      <div class="container">
+        <div class="section-header">
+          <h2>Who It’s For</h2>
+          <p>Daily Health Notes is designed for people who want a straightforward way to keep personal health information organized.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="card">
+            <h3>Personal tracking</h3>
+            <p>People who want to keep a personal symptom diary and daily health notes in one place.</p>
+          </article>
+          <article class="card">
+            <h3>Appointments</h3>
+            <p>Users who want to remember health information before appointments and keep records organized over time.</p>
+          </article>
+          <article class="card">
+            <h3>Family routines</h3>
+            <p>Anyone who wants to maintain separate health records for family members and track cycle information alongside other notes.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="disclaimer">
+      <div class="container">
+        <div class="callout" role="note" aria-live="polite">
+          <strong>Medical disclaimer</strong>
+          Daily Health Notes is intended for personal health tracking only. It does not provide medical diagnosis, treatment, or emergency advice. Users should consult a qualified healthcare professional for medical concerns.
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-header">
+          <h2>FAQ</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Is there an app for keeping daily health notes?</summary>
+            <p>Yes. Daily Health Notes is a personal health journal for tracking symptoms, measurements, medications, medical tests, notes, and other everyday health information.</p>
+          </details>
+          <details>
+            <summary>Can I track symptoms on my iPhone?</summary>
+            <p>Yes. You can record symptoms, note significance levels, and keep a personal symptom diary in the app.</p>
+          </details>
+          <details>
+            <summary>Can I record blood pressure and temperature?</summary>
+            <p>Yes. Daily Health Notes includes body temperature records and blood pressure records.</p>
+          </details>
+          <details>
+            <summary>Can I keep medication records and reminders?</summary>
+            <p>Yes. The app supports medication records, daily or weekly medication schedules, and medication reminders.</p>
+          </details>
+          <details>
+            <summary>Can I track medical tests and appointments?</summary>
+            <p>Yes. The app includes medical test records and medical-test appointment reminders.</p>
+          </details>
+          <details>
+            <summary>Can I keep separate health records for family members?</summary>
+            <p>Yes. The app supports family profiles with separate entries, medications, history, trends, and applicable cycle data.</p>
+          </details>
+          <details>
+            <summary>Can I track my menstrual cycle?</summary>
+            <p>Yes. The app supports period start and end dates, flow levels, intimate-day tracking, calendar period ranges, and upcoming-period predictions.</p>
+          </details>
+          <details>
+            <summary>Does Daily Health Notes sync with iCloud?</summary>
+            <p>Records can sync through the user’s private iCloud database when available. There is also a Sync Now option for retrieving records when setting up a new device.</p>
+          </details>
+          <details>
+            <summary>Can I export my health records?</summary>
+            <p>Yes. Users can export a backup of their records.</p>
+          </details>
+          <details>
+            <summary>Does Daily Health Notes provide medical advice?</summary>
+            <p>No. Daily Health Notes is intended for personal health tracking only and does not provide medical diagnosis, treatment, or emergency advice.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="support">
+      <div class="container">
+        <div class="support-box">
+          <h2>Support</h2>
+          <p>For support, feedback, or questions, email <a href="mailto:ginawuwriter@outlook.com">ginawuwriter@outlook.com</a>.</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div>© 2026 Daily Health Notes</div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://apps.apple.com/ng/app/daily-health-notes/id6796943929" target="_blank" rel="noopener noreferrer">App Store</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
